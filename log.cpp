@@ -1,10 +1,7 @@
 #include "log.h"
 
-Log::Log() {
-    std::cout << "Log created" << std::endl;
-}
 
-void Log::log(
+void log(
     const char *message
     , bool newline
     , bool writeToFile
@@ -13,11 +10,7 @@ void Log::log(
     , bool consoleWithTime
     ) {
     
-    
+    std::cout << message << std::endl;
     
     return;
-}
-
-Log::~Log() {
-    // TODO Auto-generated destructor stub
 }
