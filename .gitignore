@@ -128,11 +128,13 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# Pycharm
+# Pycharm and vsc
 .idea/
+.vscode/
 
 # Mac OS X
 .DS_Store
 
 # App
 log.txt
+.flags
