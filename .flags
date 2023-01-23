@@ -1,1 +1,7 @@
-YEAR=2023MESSAGE=['a']SPACE_BETWEEN_CHARS=[1]FIRST_DAY_OF_WEEK=6SPACE=1ALIGN=0USE_MONOSPACE=1
+year=2023
+firstDayOfWeek=6
+useMonospace=1
+align=0
+message=abcd
+spacesBetweenChars=[10, 11, 1, 5]
+cleanAfterExecution=1
