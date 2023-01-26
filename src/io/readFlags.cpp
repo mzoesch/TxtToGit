@@ -41,7 +41,7 @@ void readFlags(
 
     std::ifstream file("./.flags");
     if (!file.is_open()) {
-        std::cout << "Error opening file" << std::endl;
+        throw std::runtime_error("Missing ./.flags file");
         return;
     }
 
@@ -49,8 +49,8 @@ void readFlags(
     while (std::getline(file, currentLine)) {
 
         const double posOfEqualSign = currentLine.find("=");
-        if (posOfEqualSign == OUT_OF_BOUNDS) {
-            std::cout << "Error: no equal sign found in .flags file" << std::endl;
+        if (posOfEqualSign == OUT_OF_BOUNDS) {            
+            throw std::runtime_error("Missing equalation in flags ./.flags");
             continue;
         }
 

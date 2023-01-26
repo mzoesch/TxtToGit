@@ -36,6 +36,6 @@ clean:
 	-rm -r $(OBJ)/.*
 	-rm -r $(OBJ)/*.*
 	-touch $(OBJ)/.gitkeep
-	-rm $(FLAGS_FOR_APP)
+# 	-rm $(FLAGS_FOR_APP)
 
 -include $(DEPS)
