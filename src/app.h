@@ -2,9 +2,9 @@
 #define APP_H
 
 #include "io/readFlags.h"
-#include "time/timeStuff.h"
 #include "ex/exs.h"
 #include "chrs/chrs.h"
+#include "chrs/allDays.h"
 
 #include <iostream>
 #include <vector>
@@ -20,9 +20,11 @@ std::vector<int> spaceBetweenChars;
 bool cleanAfterExecution = true;
 
 // general
+std::vector<DayInformation> allDaysInYear;
 int beginRel = 0;
 int endRel = 0;
 int weeksToWork = 0;
+
 
 int main(
     int argc
@@ -30,4 +32,12 @@ int main(
     )
     ;
 
+
 #endif
+
+// for (auto it = validChars.begin(); it != validChars.end(); ++it)
+//     std::cout << it->first << std::endl;
+// for (auto it = validChars.begin(); it != validChars.end(); ++it) {
+//     for (auto it2 = it->second.begin(); it2 != it->second.end(); ++it2)
+//         std::cout << *it2 << std::endl;
+// }

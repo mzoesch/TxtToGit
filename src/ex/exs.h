@@ -3,6 +3,7 @@
 
 #include <exception>
 #include <string>
+#include <iostream> 
 
 class FirstDayOfWeekException : public std::exception {
 
@@ -25,6 +26,7 @@ public:
 
 }
 ;
+
 
 class InvalidWeeksToWorkException : public std::exception {
 
@@ -59,7 +61,28 @@ public:
 
     const char *what() const throw() {
 
-        static std::string msg = "Fatal Error:\nUnknown char: ";
+        static std::string msg = "Fatal Error:\nUnknown char: ";        
+        msg += message;
+        return msg.c_str();
+    }
+
+}
+;
+
+
+class NotEnoughSpaceToDisplayMessageException : public std::exception {
+
+private:
+    
+    const char *message;
+
+public:
+
+    NotEnoughSpaceToDisplayMessageException(const char *message) : message(message) {}
+
+    const char *what() const throw() {
+
+        static std::string msg = "Fatal Error: You need to shorten the message.\nFailed at char: ";
         msg += message;
         return msg.c_str();
     }

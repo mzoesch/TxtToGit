@@ -27,7 +27,7 @@ bool isLeapYear(
 }
 
 
-int removeInsufficientDaysAtBeginning(
+int getInsufficientDaysIndexAtBeginning(
     std::vector<DayInformation> &days
     , int firstDayOfWeek
     ) {
@@ -44,7 +44,7 @@ int removeInsufficientDaysAtBeginning(
 }
 
 
-int removeInsufficientDaysAtEnd(
+int getInsufficientDaysIndexAtEnd(
     std::vector<DayInformation> &days
     , int firstDayOfWeek
     ) {

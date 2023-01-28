@@ -30,6 +30,7 @@ private:
     int year;
     int month;
     int day;
+    bool commit;
     int _dayOfWeek;
 
 private:
@@ -38,6 +39,8 @@ private:
 
 public:
 
+    bool isCommitable();
+    void setCommitable(bool commit);
     int dayOfWeek() const { return this->_dayOfWeek; }
     
 }

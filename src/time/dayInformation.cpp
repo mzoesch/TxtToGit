@@ -9,6 +9,7 @@ DayInformation::DayInformation(
     this->year = year;
     this->month = month;
     this->day = day;
+    this->commit = false;
 
     this->_dayOfWeek = this->calculateDayOfWeek();
 
@@ -35,6 +36,17 @@ int DayInformation::calculateDayOfWeek() {
     // Sunday == 0, Monday == 1, and so on . . .
     return tOut->tm_wday;
 }
+
+
+bool DayInformation::isCommitable() {
+    return this->commit;
+}
+
+void DayInformation::setCommitable(bool commit) {
+    this->commit = commit;
+}
+;
+
 
 DayInformation::~DayInformation() {
     // TODO: Auto-generated destructor stub
