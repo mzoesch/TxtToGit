@@ -25,6 +25,7 @@ int main(int argc, char const *argv[]) {
         ad.addChar(message[i], spaceBetweenChars[i], useMonospace);
     }
 
+    std::cout << "Year:\n";
     std::cout << ad.toCharPointer() << std::endl;
 
     return 0;

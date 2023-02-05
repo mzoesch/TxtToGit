@@ -27,12 +27,13 @@ bool isLeapYear(
 }
 
 
-int getInsufficientDaysIndexAtBeginning(
+int getSufficientDaysIndexAtBeginning(
     std::vector<DayInformation> &days
     , int firstDayOfWeek
     ) {
     
     int i = 0;
+
     while (days[i].dayOfWeek() != firstDayOfWeek) {
         if (i > 6)
             throw new FirstDayOfWeekException("First day of week is not in the first 7 days of the year.");
@@ -44,7 +45,7 @@ int getInsufficientDaysIndexAtBeginning(
 }
 
 
-int getInsufficientDaysIndexAtEnd(
+int getSufficientDaysIndexAtEnd(
     std::vector<DayInformation> &days
     , int firstDayOfWeek
     ) {
@@ -66,9 +67,10 @@ std::vector<DayInformation> getAllDaysInYear(
     ) {
         
     std::vector<DayInformation> daysInYear;
-    daysInYear.reserve(366); // max days in a year
+    daysInYear.reserve(366); // Max days in a year
 
     for (int month = 0; month < 12; month++) {
+        
         int daysInThisMonth = daysInMonth[month];
         if (month == 1 && isLeapYear(year))
             daysInThisMonth++;

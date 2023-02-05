@@ -177,8 +177,8 @@ if __name__ == '__main__':
     parser.add_argument(  # --firstDayOfWeek
         '--firstDayOfWeek',
         type=int,
-        default=6,
-        help='First day of week (Mo.: 0, ...) (def.: 6)',
+        default=0,
+        help='First day of week (So.: 0, Mo.: 1, ...) (def.: 0)',
     )
 
     parser.add_argument(  # --useMonospace

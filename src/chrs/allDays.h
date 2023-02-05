@@ -7,6 +7,7 @@
 #include "../time/timeStuff.h"
 
 #include <stdlib.h>
+#include <string>
 
 const int HEIGHT = 7;
 const int MONO_WIDTH = 5;
@@ -28,8 +29,8 @@ private:
     int firstDayOfWeek;
     int _blockedDays;
     int _usableDays;
-    int _beginRel;
-    int _endRel;
+    int _beginRel; // True index
+    int _endRel; // Ture index
     int cursor;
     std::vector<DayInformation> _allDaysInYear;  
 
@@ -45,6 +46,7 @@ private:
 
     int addBlockedDays(int days);
     bool charIsValid(char c);
+    bool workableBoundsInYear(int x);
 
 public:
 
@@ -55,7 +57,7 @@ public:
         )
         ;
 
-    char *toCharPointer();
+    const char *toCharPointer();
 
 }
 ;

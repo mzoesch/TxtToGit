@@ -10,13 +10,12 @@ const std::map<char, std::vector<bool>> validChars = {
         'A'
         ,
         {
-              false, false, true , false, false
-            , false, true , false, true , false
-            , true , false, false, false, true
-            , true , false, false, false, true
-            , true , true , true , true , true
-            , true , false, false, false, true
-            , true , false, false, false, true
+              false, false, true , true , true , true , true
+            , false, true , false, true , false, false, false
+            , true , false, false, true , false, false, false
+            , false, true , false, true , false, false, false
+            , false, false, true , true , true , true , true
+
         }
 
     }
@@ -25,13 +24,11 @@ const std::map<char, std::vector<bool>> validChars = {
         'B'
         ,
         {
-              true , true , true , true , false
-            , true , false, false, false, true
-            , true , false, false, false, true
-            , true , true , true , true , false
-            , true , false, false, false, true
-            , true , false, false, false, true
-            , true , true , true , true , false
+              true , true , true , true , true , true , true
+            , true , false, false, true , false, false, true
+            , true , false, false, true , false, false, true
+            , true , false, false, true , false, false, true
+            , false, true , true , true , true , true , false
         }
     }
     ,
@@ -39,13 +36,11 @@ const std::map<char, std::vector<bool>> validChars = {
         'C'
         ,
         {
-              false, true , true , true , false
-            , true , false, false, false, true
-            , true , false, false, false, false
-            , true , false, false, false, false
-            , true , false, false, false, false
-            , true , false, false, false, true
-            , false, true , true , true , false
+              false, true , true , true , true , true , false
+            , true , false, false, false, false, false, true
+            , true , false, false, false, false, false, true
+            , true , false, false, false, false, false, true
+            , false, true , false, false, false, true , false
         }
     }
 }

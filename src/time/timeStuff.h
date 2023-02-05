@@ -29,14 +29,14 @@ bool isLeapYear(
     ;
 
 
-int getInsufficientDaysIndexAtBeginning(
+int getSufficientDaysIndexAtBeginning(
     std::vector<DayInformation> &days
     , int firstDayOfWeek
     )
     ;
 
 
-int getInsufficientDaysIndexAtEnd(
+int getSufficientDaysIndexAtEnd(
     std::vector<DayInformation> &days
     , int firstDayOfWeek
     )

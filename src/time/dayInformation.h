@@ -2,6 +2,7 @@
 #define DAY_INFORMATION_H
 
 #include <ctime>
+#include <string>
 
 const int timeStandard [] = {
     0       // second
@@ -42,6 +43,10 @@ public:
     bool isCommitable();
     void setCommitable(bool commit);
     int dayOfWeek() const { return this->_dayOfWeek; }
+    int getDay() const { return this->day; }
+    std::string getDate() const {
+        return std::to_string(this->day) + " " + std::to_string(this->month) + " " + std::to_string(this->year);
+    }
     
 }
 ;
