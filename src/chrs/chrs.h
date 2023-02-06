@@ -2,10 +2,13 @@
 #define CHRS_H
 
 #include <vector>
-#include <map>
+#include <unordered_map>
 
 
-const std::map<char, std::vector<bool>> validChars = {
+const std::unordered_map<char, std::vector<bool>> validChars = {
+    
+#pragma region UpperCase
+
     {
         'A'
         ,
@@ -43,6 +46,23 @@ const std::map<char, std::vector<bool>> validChars = {
             , false, true , false, false, false, true , false
         }
     }
+    ,
+
+#pragma endregion UpperCase
+
+#pragma region Punctuation
+
+    {
+        '!'
+        ,
+        {
+              true , true , true , true , true , false, true
+        }
+    }
+    ,
+
+#pragma endregion Punctuation
+
 }
 ;
 

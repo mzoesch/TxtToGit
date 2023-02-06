@@ -56,30 +56,66 @@ bool AllDays::charIsValid(
 
 void AllDays::addChar(
     char c
-    , int space
+    , int space // Space in weeks
     , bool useMonospace
 ) {
 
-    // TODO: Build space and useMonospace
+    int spaceToAdd;
+    int charSize;
 
     try {
         
-        if (!this->charIsValid(c))
-            throw new UnknownCharException(new char(c)); // On heap
+        spaceToAdd = this->DAYS_IN_WEEK * space;
+        if (this->addBlockedDays(spaceToAdd))
+            throw new NotEnoughSpaceToDisplayMessageException(new char(c)); // On heap
 
-        if (this->addBlockedDays(validChars.find(c)->second.size()) == -1)
-            throw new NotEnoughSpaceToDisplayMessageException(new char(c)); // Heap
-    
+        if (!this->charIsValid(c))
+            throw new UnknownCharException(new char(c));
+        charSize = useMonospace ? this->MONOSPACE_SIZE : validChars.find(c)->second.size();
+        if (this->addBlockedDays(charSize) == -1)
+            throw new NotEnoughSpaceToDisplayMessageException(new char(c));
+
     } catch (std::exception *e) {
         
         std::cerr << e->what() << std::endl;
         exit(EXIT_FAILURE);
     }
 
-    cursor += 7 * space; // TODO: Make immediate a var.
+    cursor += spaceToAdd;
     
-    // There MUST be always enough space for this char
     std::vector<bool> charAsVector = validChars.find(c)->second;
+    
+    if (charAsVector.size() == this->MONOSPACE_SIZE || !useMonospace) {
+        
+        for (bool b : charAsVector) {
+            this->_allDaysInYear.at(this->cursor).setCommitable(b);
+            this->cursor++;
+        }
+
+        return;
+    }
+
+    // Fill char with false statements (Monospace == true)
+    int weeksToFillUp = this->weeksToFillUpInMonospace(charAsVector.size());
+    bool append = true; // If above var is odd, a week will be more appended than prepended
+
+    while (weeksToFillUp > 0) {
+        
+        int i = 0;
+        while (i < this->DAYS_IN_WEEK) {
+                        
+            charAsVector.insert(append ? charAsVector.end() : charAsVector.begin(), false);
+            i++;
+
+            continue;
+        }
+        
+        append = !append;
+        weeksToFillUp--;
+
+        continue;
+    }
+
     for (bool b : charAsVector) {
         this->_allDaysInYear.at(this->cursor).setCommitable(b);
         this->cursor++;
@@ -97,35 +133,26 @@ AllDays::~AllDays() {
 
 
 const char *AllDays::toCharPointer() {
-    
-
-    std::cout << std::to_string(this->beginRel()) << " : " << std::to_string(this->endRel()) << "\n";
-    std::cout << std::to_string(this->weeksToWork()) << " : " << std::to_string(this->_usableDays) <<"\n";
-    std::cout << std::to_string(this->_allDaysInYear.size()) << "\n";
-    std::cout << std::to_string(this->_allDaysInYear.size() - this->beginRel() - (this->_allDaysInYear.size() - this->endRel())) << std::endl;
-
-
 
     // Unsafe - fix: Allocate in static space not stack
     static std::string s;
+    s = ""; // Clear string if this method is called multiple times
     int cursor = this->beginRel();
     int multiplied = 0;
 
     if (this->beginRel() != 0) // Year cannot start with an insufficient day
-        s.append("X");
-    
-    
+        s.push_back(this->INSUFFICIENT);
+
     while (true) {
         
         if (!this->workableBoundsInYear(cursor)) {
-
-            if (this->endRel() != this->_allDaysInYear.size() - 1) { // Add end-insufficient days
-                if (cursor > this->_allDaysInYear.size() - 1)
-                    s.append("X");
-                else
-                    s.append("0");
-            }
             
+            if (this->endRel() != this->_allDaysInYear.size() - 1) // Add end-insufficient days
+                s.push_back(
+                    cursor > this->_allDaysInYear.size() - 1 ? this->INSUFFICIENT : this->IS_NOT_COMMIT
+                )
+                ;
+
             cursor -= 7 * multiplied;
             cursor++;
             multiplied = 0;
@@ -133,20 +160,21 @@ const char *AllDays::toCharPointer() {
             if (cursor >= this->beginRel() + 7)
                 break;
             
-            s.append("\n");
+            s.push_back(this->NEW_LINE);
 
-            if (this->beginRel() != 0) { // Add begin-insufficient days
-                if (cursor - 7 < 0)
-                    s.append("X");
-                else
-                    s.append("0");
-            }
+            if (this->beginRel() != 0) // Add begin-insufficient days
+                s.push_back(
+                    cursor - 7 < 0 ? this->INSUFFICIENT : this->IS_NOT_COMMIT
+                )
+                ;
 
             continue;
         }
 
-
-        s.append(std::to_string(this->_allDaysInYear[cursor].isCommitable()));
+        s.push_back(
+            this->_allDaysInYear[cursor].isCommitable() ? this->IS_COMMIT : this->IS_NOT_COMMIT
+        )
+        ;
         
         cursor += 7;
         multiplied++;
@@ -162,12 +190,165 @@ bool AllDays::workableBoundsInYear(
     int x
 ) {
 
-    // ?? return this->_allDaysInYear.size() - this->beginRel() - (this->_allDaysInYear.size() - this->endRel());
-
     if (x < this->beginRel())
         return false;
     if (x > this->endRel())
         return false;
 
     return true;
+}
+
+
+void AllDays::align(
+    int alignment
+) {
+
+    if (alignment == 0) // Text is automatically aligned left
+        return;
+
+    if (alignment == 1) { // Center
+
+        int spaceBeforeTxtInWeeks = 0;
+        int spaceAfterTxtInWeeks = 0;
+
+        while (true) {
+
+            if (this->_allDaysInYear[this->beginRel() + spaceBeforeTxtInWeeks].isCommitable() == true)
+                break;
+
+            spaceBeforeTxtInWeeks++;
+
+            continue;
+        }
+        
+        while (true) {
+            
+            if (this->_allDaysInYear[this->endRel() - spaceAfterTxtInWeeks].isCommitable() == true)
+                break;
+
+            spaceAfterTxtInWeeks++;
+
+            continue;
+        }
+
+        spaceBeforeTxtInWeeks /= this->DAYS_IN_WEEK;
+        spaceAfterTxtInWeeks /= this->DAYS_IN_WEEK;
+
+        if (spaceBeforeTxtInWeeks == spaceAfterTxtInWeeks)
+            return;
+        
+        int delta = spaceBeforeTxtInWeeks - spaceAfterTxtInWeeks;
+        int transform = delta / 2;
+        if (transform == 0)
+            return;
+
+        if (transform < 0)
+            this->rotateRight(transform);
+        if (transform > 0)
+            this->rotateLeft(transform);
+
+        return;
+    }
+
+    if (alignment == 2) { // Right
+        
+        int spaceBeforeTxtInWeeks = 0;
+        int spaceAfterTxtInWeeks = 0;
+
+        while (true) {
+
+            if (this->_allDaysInYear[this->beginRel() + spaceBeforeTxtInWeeks].isCommitable() == true)
+                break;
+
+            spaceBeforeTxtInWeeks++;
+
+            continue;
+        }
+        
+        while (true) {
+            
+            if (this->_allDaysInYear[this->endRel() - spaceAfterTxtInWeeks].isCommitable() == true)
+                break;
+
+            spaceAfterTxtInWeeks++;
+
+            continue;
+        }
+
+        spaceBeforeTxtInWeeks /= this->DAYS_IN_WEEK;
+        spaceAfterTxtInWeeks /= this->DAYS_IN_WEEK;
+
+        int transform = spaceBeforeTxtInWeeks - spaceAfterTxtInWeeks;
+        if (transform == 0)
+            return;
+        
+        if (transform < 0)
+            this->rotateRight(transform);
+        if (transform > 0)
+            this->rotateLeft(transform);
+        
+        return;
+    }
+
+    return;
+}
+
+
+void AllDays::rotateRight(int weeks) {
+
+    if (weeks == 0)
+        return;
+
+    std::vector<bool> cms(
+        abs(weeks * this->DAYS_IN_WEEK)
+        )
+        ;
+    int cursor = 0;
+    int idxCMs = 0;
+    
+    while (true) {
+        
+        if (cursor > this->_allDaysInYear.size() - 1)
+            break;
+
+        bool cm = this->_allDaysInYear[cursor].isCommitable();
+        this->_allDaysInYear[cursor].setCommitable(cms[idxCMs]);
+        cms[idxCMs] = cm;
+        idxCMs = (idxCMs + 1) % cms.size();
+        cursor++;
+
+        continue;
+    }
+    
+    return;
+}
+
+
+void AllDays::rotateLeft(int weeks) {
+
+    if (weeks == 0)
+        return;
+    
+    std::vector<bool> cms(
+        abs(weeks * this->DAYS_IN_WEEK)
+    )
+    ;
+    int cursor = this->_allDaysInYear.size() - 1;
+    int idxCMs = 0;
+
+    while (true) {
+        
+        if (cursor < 0)
+            break;
+        
+        bool cm = this->_allDaysInYear[cursor].isCommitable();
+        this->_allDaysInYear[cursor].setCommitable(cms[idxCMs]);
+        cms[idxCMs] = cm;
+        idxCMs = (idxCMs + 1) % cms.size();
+        cursor--;
+
+        continue;    
+    }
+    
+    return;
 }

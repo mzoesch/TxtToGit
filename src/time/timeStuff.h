@@ -48,4 +48,5 @@ std::vector<DayInformation> getAllDaysInYear(
     )
     ;
 
+
 #endif

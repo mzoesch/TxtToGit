@@ -9,7 +9,6 @@
 #include <iostream>
 #include <vector>
 
-
 // ./.flags
 int year = 0;
 int first_day_of_week = 6;
@@ -34,10 +33,3 @@ int main(
 
 
 #endif
-
-// for (auto it = validChars.begin(); it != validChars.end(); ++it)
-//     std::cout << it->first << std::endl;
-// for (auto it = validChars.begin(); it != validChars.end(); ++it) {
-//     for (auto it2 = it->second.begin(); it2 != it->second.end(); ++it2)
-//         std::cout << *it2 << std::endl;
-// }

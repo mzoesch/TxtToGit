@@ -54,3 +54,16 @@ DayInformation::~DayInformation() {
     return;
 }
 ;
+
+
+tDateHolder DayInformation::getDate() {
+
+        tDateHolder tdh = tDateHolder();
+
+        tdh.day = this->day;
+        tdh.month = this->month;
+        tdh.year = this->year;
+
+        return tdh;
+}
+;

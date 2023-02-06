@@ -1,6 +1,8 @@
 #ifndef DAY_INFORMATION_H
 #define DAY_INFORMATION_H
 
+#include "tDateHolder.h"
+
 #include <ctime>
 #include <string>
 
@@ -47,6 +49,7 @@ public:
     std::string getDate() const {
         return std::to_string(this->day) + " " + std::to_string(this->month) + " " + std::to_string(this->year);
     }
+    tDateHolder getDate();
     
 }
 ;
