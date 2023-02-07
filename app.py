@@ -3,6 +3,7 @@
 import argparse
 import time
 import subprocess
+import sys
 
 
 class SubprocessFailed(Exception):
@@ -27,8 +28,11 @@ def clean_build_dirs() -> None:
     )
 
     if p.returncode != 0:
+        print(p.stdout.decode('utf-8'), end='')
+        print(p.stderr.decode('utf-8'))
+
         raise SubprocessFailed(
-            f'{p.stderr.decode("utf-8")}\nWhile cleaning build dirs'
+            f'{p.stderr.decode("utf-8")}\nWhile cleaning build dirs.'
         )
         return
 
@@ -40,10 +44,71 @@ def clean_build_dirs() -> None:
         check=False,
     )
 
+    print(p.stdout.decode('utf-8'), end='')
+    print(p.stderr.decode('utf-8'))
+
     if p.returncode != 0:
         raise SubprocessFailed(
-            f'{p.stderr.decode("utf-8")}\nWhile cleaning .flags'
+            f'{p.stderr.decode("utf-8")}\nWhile cleaning .flags.'
         )
+        return
+
+    return
+
+
+def build_bin() -> None:
+
+    p: subprocess = subprocess.Popen(
+        f'make',
+        shell=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+
+    for c in iter(lambda: p.stdout.read(1), b''):
+        print(c.decode('utf-8'), end='')
+
+    return
+
+
+def run_bin(part: int) -> None:
+
+    cntn: str = '0'
+    abort: str = '-1'
+    cmmt: str = '1'
+
+    if part == 1:
+
+        with open('.tmp.txt', 'w') as f:
+            f.write(cntn)
+
+        p: subprocess = subprocess.Popen(
+            f'./obj/output',
+            shell=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+
+        for c in iter(lambda: p.stdout.read(1), b''):
+            t: str = c.decode('utf-8')
+            if (t == '$'):
+                run_bin(2)
+            else:
+                print(t, end='')
+
+        return
+
+    if part == 2:
+
+        ipt: str = input('Commit to git (y/n): ')
+        if (ipt == 'y'):
+            with open('.tmp.txt', 'w') as f:
+                f.write(cmmt)
+            return
+
+        with open('.tmp.txt', 'w') as f:
+            f.write(abort)
+        return
 
     return
 
@@ -58,6 +123,10 @@ def validate_args(parser_args: argparse.Namespace) -> None:
     message: str = parser_args.message
     message_string: str = parser_args.messageString
     cleanAfterExecution: int = parser_args.cleanAfterExecution
+    minNumberOfCommitsAtOneDay: int = parser_args.minNumberOfCommitsAtOneDay
+    maxNumberOfCommitsAtOneDay: int = parser_args.maxNumberOfCommitsAtOneDay
+    makeCommitsInDifferentRepo: int = parser_args.makeCommitsInDifferentRepo
+    pathToDifferentRepo: str = parser_args.pathToDifferentRepo
 
     if year < 1970:
         raise ValueError('Year must be >= 1970.')
@@ -73,6 +142,20 @@ def validate_args(parser_args: argparse.Namespace) -> None:
         raise ValueError('Message and messageString are mutually exclusive.')
     if cleanAfterExecution not in [0, 1]:
         raise ValueError('CleanAfterExecution must in range [0, 1].')
+    if minNumberOfCommitsAtOneDay < 0:
+        raise ValueError('minNumberOfCommitsAtOneDay must be >= 0.')
+    if maxNumberOfCommitsAtOneDay < 1:
+        raise ValueError('maxNumberOfCommitsAtOneDay must be >= 1.')
+    if minNumberOfCommitsAtOneDay > maxNumberOfCommitsAtOneDay:
+        raise ValueError(
+            'minNumberOfCommitsAtOneDay must be <= maxNumberOfCommitsAtOneDay.'
+        )
+    if makeCommitsInDifferentRepo not in [0, 1]:
+        raise ValueError('makeCommitsInDifferentRepo must in range [0, 1].')
+    if makeCommitsInDifferentRepo == 1 and pathToDifferentRepo == '':
+        raise ValueError(
+            'pathToDifferentRepo must be set if makeCommitsInDifferentRepo is set to 1.'
+        )
 
     string: str = ''
     spacesBetweenChars: list[int] = []
@@ -119,6 +202,10 @@ def validate_args(parser_args: argparse.Namespace) -> None:
         'message': string,
         'spacesBetweenChars': spacesBetweenChars,
         'cleanAfterExecution': cleanAfterExecution,
+        'minNumberOfCommitsAtOneDay': minNumberOfCommitsAtOneDay,
+        'maxNumberOfCommitsAtOneDay': maxNumberOfCommitsAtOneDay,
+        'makeCommitsInDifferentRepo': makeCommitsInDifferentRepo,
+        'pathToDifferentRepo': pathToDifferentRepo,
     }
 
 
@@ -141,6 +228,7 @@ def main(*args, **kwargs) -> None:
 
     parser_args = kwargs['parser_args']
     clean: int = parser_args.clean
+    cleanAfterExecution: int = parser_args.cleanAfterExecution
 
     if clean == 1:
         return clean_build_dirs()
@@ -150,6 +238,13 @@ def main(*args, **kwargs) -> None:
             parser_args=parser_args
         )
     )
+
+    build_bin()
+
+    run_bin(1)
+
+    if cleanAfterExecution == 1:
+        return clean_build_dirs()
 
     return
 
@@ -163,7 +258,7 @@ if __name__ == '__main__':
         '--clean',
         type=int,
         default=0,
-        help='Clean build dirs (def.: 0)',
+        help='Clean build dirs (def.: 0).',
     )
 
     parser.add_argument(  # --year
@@ -171,14 +266,14 @@ if __name__ == '__main__':
         '--year',
         type=int,
         default=time.localtime().tm_year,
-        help='Year to gen for (def.: current year)',
+        help='Year to gen for (def.: current year).',
     )
 
     parser.add_argument(  # --firstDayOfWeek
         '--firstDayOfWeek',
         type=int,
         default=0,
-        help='First day of week (So.: 0, Mo.: 1, ...) (def.: 0)',
+        help='First day of week (So.: 0, Mo.: 1, ...) (def.: 0).',
     )
 
     parser.add_argument(  # --useMonospace
@@ -186,7 +281,7 @@ if __name__ == '__main__':
         '--useMonospace',
         type=int,
         default=1,
-        help='Use monospace (def.: 1)',
+        help='Use monospace (def.: 1).',
     )
 
     parser.add_argument(  # --defaultSpace
@@ -194,7 +289,7 @@ if __name__ == '__main__':
         '--defaultSpace',
         type=int,
         default=1,
-        help='Default space int weeks (def.: 1)',
+        help='Default space int weeks (def.: 1).',
     )
 
     parser.add_argument(  # --align
@@ -202,7 +297,7 @@ if __name__ == '__main__':
         '--align',
         type=int,
         default=0,
-        help='Align text (0: left, 1: center, 2: right) (def.: 0)',
+        help='Align text (0: left, 1: center, 2: right) (def.: 0).',
     )
 
     parser.add_argument(  # --message
@@ -210,7 +305,7 @@ if __name__ == '__main__':
         '--message',
         type=str,
         default='',
-        help='Message in commits (e.g. "Char SpaceInWeeks, A2, b1, ...") (def.: empty)',
+        help='Message in commits (e.g. "Char SpaceInWeeks, A2, b1, ...") (def.: empty).',
     )
 
     parser.add_argument(  # --messageString
@@ -218,7 +313,7 @@ if __name__ == '__main__':
         '--messageString',
         type=str,
         default='',
-        help='Message in commits; uses default Space for all characters (e.g. "ab") (def.: empty)',
+        help='Message in commits; uses default Space for all characters (e.g. "ab") (def.: empty).',
     )
 
     parser.add_argument(  # --cleanAfterExecution
@@ -226,7 +321,39 @@ if __name__ == '__main__':
         '--cleanAfterExecution',
         type=int,
         default=1,
-        help='Clean build dirs after execution (def.: 1)',
+        help='Clean build dirs after execution (def.: 1).',
+    )
+
+    parser.add_argument(  # --minNumberOfCommitsAtOneDay
+        '-min',
+        '--minNumberOfCommitsAtOneDay',
+        type=int,
+        default=1,
+        help='Min number of commits at one day that is commitable (def.: 1).',
+    )
+
+    parser.add_argument(  # --maxNumberOfCommitsAtOneDay
+        '-max',
+        '--maxNumberOfCommitsAtOneDay',
+        type=int,
+        default=5,
+        help='Max number of commits at one day that is commitable (def.: 5).',
+    )
+
+    parser.add_argument(  # --makeCommitsInDifferentRepo
+        '-mCDR',
+        '--makeCommitsInDifferentRepo',
+        type=int,
+        default=1,
+        help='Make commits in different repo (def.: 1).',
+    )
+
+    parser.add_argument(  # --pathToDifferentRepo
+        '-pDR',
+        '--pathToDifferentRepo',
+        type=str,
+        default='myTextOnGitHub',
+        help='Path to different repo (def.: myTextOnGitHub).',
     )
 
     main(parser_args=parser.parse_args())

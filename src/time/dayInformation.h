@@ -2,6 +2,7 @@
 #define DAY_INFORMATION_H
 
 #include "tDateHolder.h"
+#include "../io/shell.h"
 
 #include <ctime>
 #include <string>
@@ -50,6 +51,8 @@ public:
         return std::to_string(this->day) + " " + std::to_string(this->month) + " " + std::to_string(this->year);
     }
     tDateHolder getDate();
+    void gitCommit(int min, int max);
+    void gitCommit(int min, int max, std::string pathToDifferentRepo);
     
 }
 ;

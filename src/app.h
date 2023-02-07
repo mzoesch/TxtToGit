@@ -8,6 +8,9 @@
 
 #include <iostream>
 #include <vector>
+#include <string>
+#include <chrono>
+#include <thread>
 
 // ./.flags
 int year = 0;
@@ -17,12 +20,17 @@ int align = 0;
 std::vector<char> message;
 std::vector<int> spaceBetweenChars;
 bool cleanAfterExecution = true;
+int minNumberOfCommitsAtOneDay = 1;
+int maxNumberOfCommitsAtOneDay = 5;
+int makeCommitsInDifferentRepo = 1;
+std::string pathToDifferentRepo;
 
 // general
 std::vector<DayInformation> allDaysInYear;
 int beginRel = 0;
 int endRel = 0;
 int weeksToWork = 0;
+std::string input;
 
 
 int main(

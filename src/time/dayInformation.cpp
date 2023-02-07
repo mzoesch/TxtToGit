@@ -1,4 +1,5 @@
 #include "dayInformation.h"
+#include <iostream>
 
 DayInformation::DayInformation(
     int year
@@ -65,5 +66,28 @@ tDateHolder DayInformation::getDate() {
         tdh.year = this->year;
 
         return tdh;
+}
+;
+
+
+void DayInformation::gitCommit(int min, int max) {
+    std::cout << "Commits in same repo" << std::endl;
+
+    std::cout << exec("pwd") << std::endl;
+
+    // int numCommits = min + (rand() % (max - min + 1));
+    // std::cout << "numCommits: " << numCommits << std::endl;
+
+    return;
+}
+;
+
+
+void DayInformation::gitCommit(int min, int max, std::string pathToDifferentRepo) {
+    std::cout << "Commits in an other repo" << std::endl;
+
+    std::cout << exec("pwd") << std::endl;
+
+    return;
 }
 ;

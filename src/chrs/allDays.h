@@ -19,6 +19,10 @@ public:
     AllDays(
         int year
         , int firstDayOfWeek
+        , int minCommits
+        , int maxCommits
+        , int makeCommitsInDifferentRepo
+        , std::string pathToDifferentRepo
     )
     ;
     ~AllDays();
@@ -40,6 +44,10 @@ private:
     int _beginRel; // True index
     int _endRel; // True index
     int cursor;
+    int minCommits;
+    int maxCommits;
+    int makeCommitsInDifferentRepo;
+    std::string pathToDifferentRepo;
     std::vector<DayInformation> _allDaysInYear;  
 
 private:
@@ -65,6 +73,7 @@ public:
         )
         ;
     void align(int n);
+    void commitEverything();
     const char *toCharPointer();
 
 }

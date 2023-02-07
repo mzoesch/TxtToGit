@@ -1,6 +1,7 @@
 
 TARGET := output
 FLAGS_FOR_APP = ./.flags
+TMP_CONFIG = ./.tmp.txt
 
 OBJ := ./obj
 SRC_DIRS := ./src
@@ -36,6 +37,7 @@ clean:
 	-rm -r $(OBJ)/.*
 	-rm -r $(OBJ)/*.*
 	-touch $(OBJ)/.gitkeep
-# 	-rm $(FLAGS_FOR_APP)
+	-rm $(FLAGS_FOR_APP)
+	-rm $(TMP_CONFIG)
 
 -include $(DEPS)

@@ -4,6 +4,7 @@
 #include <vector>
 #include <fstream>
 #include <iostream>
+#include <string>
 
 const double OUT_OF_BOUNDS = std::string::npos; // 18446744073709551615
 
@@ -20,6 +21,10 @@ void readFlags(
     , std::vector<char> *message
     , std::vector<int> *spaceBetweenChars
     , bool *cleanAfterExecution
+    , int *minNumberOfCommitsAtOneDay
+    , int *maxNumberOfCommitsAtOneDay
+    , int *makeCommitsInDifferentRepo
+    , std::string *pathToDifferentRepo
     )
     ;
 

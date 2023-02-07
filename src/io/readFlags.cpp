@@ -37,6 +37,10 @@ void readFlags(
     , std::vector<char> *message
     , std::vector<int> *spaceBetweenChars
     , bool *cleanAfterExecution
+    , int *minNumberOfCommitsAtOneDay
+    , int *maxNumberOfCommitsAtOneDay
+    , int *makeCommitsInDifferentRepo
+    , std::string *pathToDifferentRepo
     ) {
 
     std::ifstream file("./.flags");
@@ -57,32 +61,52 @@ void readFlags(
         const std::string key = currentLine.substr(0, posOfEqualSign);
         std::string value = currentLine.substr(posOfEqualSign + 1);
 
-        switch (key[0]) {
-            case 'y':
-                *year = std::stoi(value);
-                break;
-            case 'f':
-                *first_day_of_week = std::stoi(value);
-                break;
-            case 'u':
-                *useMonospace = std::stoi(value);
-                break;
-            case 'a':
-                *align = std::stoi(value);
-                break;
-            case 'm':
-                for (char c : value) message->push_back(c);
-                break;
-            case 's':
-                *spaceBetweenChars = convertStringToVectorOfInts(&value);
-                break;
-            case 'c':
-                *cleanAfterExecution = std::stoi(value);
-                break;
-
-            default:
-                break;
-        }        
+        if (strcmp(key.c_str(), "year") == 0) {
+            *year = std::stoi(value);
+            continue;
+        }
+        if (strcmp(key.c_str(), "firstDayOfWeek") == 0) {
+            *first_day_of_week = std::stoi(value);
+            continue;
+        }
+        if (strcmp(key.c_str(), "useMonospace") == 0) {
+            *useMonospace = std::stoi(value);
+            continue;
+        }
+        if (strcmp(key.c_str(), "align") == 0) {
+            *align = std::stoi(value);
+            continue;
+        }
+        if (strcmp(key.c_str(), "message") == 0) {
+            for (char c : value) message->push_back(c);
+            continue;
+        }
+        if (strcmp(key.c_str(), "spacesBetweenChars") == 0) {
+            *spaceBetweenChars = convertStringToVectorOfInts(&value);
+            continue;
+        }
+        if (strcmp(key.c_str(), "cleanAfterExecution") == 0) {
+            *cleanAfterExecution = std::stoi(value);
+            continue;
+        }
+        if (strcmp(key.c_str(), "minNumberOfCommitsAtOneDay") == 0) {
+            *minNumberOfCommitsAtOneDay = std::stoi(value);
+            continue;
+        }
+        if (strcmp(key.c_str(), "maxNumberOfCommitsAtOneDay") == 0) {
+            *maxNumberOfCommitsAtOneDay = std::stoi(value);
+            continue;
+        }
+        if (strcmp(key.c_str(), "makeCommitsInDifferentRepo") == 0) {
+            *makeCommitsInDifferentRepo = std::stoi(value);
+            continue;
+        }
+        if (strcmp(key.c_str(), "pathToDifferentRepo") == 0) {
+            *pathToDifferentRepo = value;
+            continue;
+        }
+        
+        break;      
     }
 
     return;

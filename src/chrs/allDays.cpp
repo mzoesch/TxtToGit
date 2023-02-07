@@ -5,10 +5,19 @@
 AllDays::AllDays(
     int year
     , int firstDayOfWeek
+    , int minCommits
+    , int maxCommits
+    , int makeCommitsInDifferentRepo
+    , std::string pathToDifferentRepo
 ) {
     
     this->_blockedDays = 0;
     this->year = year;
+    this->minCommits = minCommits;
+    this->maxCommits = maxCommits;
+
+    this->makeCommitsInDifferentRepo = makeCommitsInDifferentRepo;
+    this->pathToDifferentRepo = pathToDifferentRepo;
 
     this->_allDaysInYear = getAllDaysInYear(this->year);
 
@@ -350,5 +359,24 @@ void AllDays::rotateLeft(int weeks) {
         continue;    
     }
     
+    return;
+}
+
+
+void AllDays::commitEverything() {
+
+    for (DayInformation di : this->_allDaysInYear) {
+
+        if (di.isCommitable() == false)
+            continue;
+
+        if (this->makeCommitsInDifferentRepo == 1)
+            di.gitCommit(this->minCommits, this->maxCommits, this->pathToDifferentRepo);
+        else
+            di.gitCommit(this->minCommits, this->maxCommits);
+
+        break;
+    }
+
     return;
 }
