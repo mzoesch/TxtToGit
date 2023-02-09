@@ -8,16 +8,19 @@ AllDays::AllDays(
     , int minCommits
     , int maxCommits
     , int makeCommitsInDifferentRepo
-    , std::string pathToDifferentRepo
+    , std::string nameOfDifferentRepo
+    , int ignoreExistingGitRepo
 ) {
     
     this->_blockedDays = 0;
     this->year = year;
     this->minCommits = minCommits;
     this->maxCommits = maxCommits;
+    this->ignoreExistingGitRepo = ignoreExistingGitRepo;
 
     this->makeCommitsInDifferentRepo = makeCommitsInDifferentRepo;
-    this->pathToDifferentRepo = pathToDifferentRepo;
+    this->nameOfDifferentRepo = nameOfDifferentRepo;
+    this->changeFile = this->nameOfDifferentRepo;
 
     this->_allDaysInYear = getAllDaysInYear(this->year);
 
@@ -365,18 +368,96 @@ void AllDays::rotateLeft(int weeks) {
 
 void AllDays::commitEverything() {
 
+    prepareGitRepo();
+
+    std::__fs::filesystem::path p = exec(this->PWD.c_str());
+    p.remove_filename().append(this->nameOfDifferentRepo);
+
+    std::string changeFile = this->changeFile;
+    changeFile.append(this->extForChangeFile);
+
     for (DayInformation di : this->_allDaysInYear) {
 
         if (di.isCommitable() == false)
             continue;
 
-        if (this->makeCommitsInDifferentRepo == 1)
-            di.gitCommit(this->minCommits, this->maxCommits, this->pathToDifferentRepo);
+        if (this->makeCommitsInDifferentRepo == 1) {
+            
+            // std::cout << di.getDay() << "\n";
+            // continue;
+
+            di.gitCommit(
+                this->minCommits
+                , this->maxCommits
+                , p.string()
+                , changeFile
+                )
+                ;
+        
+        }
         else
             di.gitCommit(this->minCommits, this->maxCommits);
-
-        break;
     }
+
+    return;
+}
+
+
+void AllDays::prepareGitRepo() {
+    // TODO: README.md
+    
+    std::__fs::filesystem::path p = exec(this->PWD.c_str());
+    p.remove_filename().append(this->nameOfDifferentRepo);
+    bool repoExists = false;
+
+    DIR* dir = opendir(p.c_str());
+    if (dir) {
+        
+        closedir(dir);
+        if (this->ignoreExistingGitRepo == false)
+            throw std::runtime_error("Directory to repo already exists.");
+            return;
+        
+        repoExists = true;
+    }
+    else if (ENOENT != errno) {
+        
+        closedir(dir);
+        throw std::runtime_error("Fatal Error:\nFailed reading directory structure.");
+        return;
+    }
+
+    std::string prepareRepo = "";
+
+    if (repoExists) {
+    
+        prepareRepo += this->mkdir.c_str();
+        prepareRepo += " ";
+        prepareRepo += p.string();
+
+        prepareRepo += " ";
+        prepareRepo += this->andGate;
+        prepareRepo += " ";
+    }
+
+    // Does not throw if git is already initialized
+    prepareRepo += this->initGit;
+    prepareRepo += " ";
+    prepareRepo += p.string();
+
+    prepareRepo += " ";
+    prepareRepo += this->andGate;
+    prepareRepo += " ";
+    
+    // Does not throw if this->changeFile already exists
+    prepareRepo += this->createChangeFile;
+    prepareRepo += " ";
+    prepareRepo += p.append(this->changeFile).
+    concat(this->extForChangeFile).
+    append(this->extForChangeFile)
+    ;
+
+    exec(prepareRepo.c_str());
 
     return;
 }

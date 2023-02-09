@@ -14,7 +14,8 @@ int main(int argc, char const *argv[]) {
         , &minNumberOfCommitsAtOneDay
         , &maxNumberOfCommitsAtOneDay
         , &makeCommitsInDifferentRepo
-        , &pathToDifferentRepo
+        , &nameOfDifferentRepo
+        , &ignoreExistingGitRepo
     )
     ;
     
@@ -25,7 +26,8 @@ int main(int argc, char const *argv[]) {
         , minNumberOfCommitsAtOneDay
         , maxNumberOfCommitsAtOneDay
         , makeCommitsInDifferentRepo
-        , pathToDifferentRepo
+        , nameOfDifferentRepo
+        , ignoreExistingGitRepo
         )
         ;
     

@@ -14,7 +14,7 @@ std::vector<int> convertStringToVectorOfInts(
     ;
 
 void readFlags(
-        int *year
+    int *year
     , int *first_day_of_week
     , bool *useMonospace
     , int *align
@@ -24,7 +24,8 @@ void readFlags(
     , int *minNumberOfCommitsAtOneDay
     , int *maxNumberOfCommitsAtOneDay
     , int *makeCommitsInDifferentRepo
-    , std::string *pathToDifferentRepo
+    , std::string *nameOfDifferentRepo
+    , int *ignoreExistingGitRepo
     )
     ;
 

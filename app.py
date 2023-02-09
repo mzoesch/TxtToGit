@@ -96,6 +96,12 @@ def run_bin(part: int) -> None:
             else:
                 print(t, end='')
 
+            continue
+
+        for c in iter(lambda: p.stderr.read(1), b''):
+            print(c.decode('utf-8'), end='')
+            continue
+
         return
 
     if part == 2:
@@ -126,7 +132,8 @@ def validate_args(parser_args: argparse.Namespace) -> None:
     minNumberOfCommitsAtOneDay: int = parser_args.minNumberOfCommitsAtOneDay
     maxNumberOfCommitsAtOneDay: int = parser_args.maxNumberOfCommitsAtOneDay
     makeCommitsInDifferentRepo: int = parser_args.makeCommitsInDifferentRepo
-    pathToDifferentRepo: str = parser_args.pathToDifferentRepo
+    nameOfDifferentRepo: str = parser_args.nameOfDifferentRepo
+    ignoreExistingGitRepo: int = parser_args.ignoreExistingGitRepo
 
     if year < 1970:
         raise ValueError('Year must be >= 1970.')
@@ -152,10 +159,12 @@ def validate_args(parser_args: argparse.Namespace) -> None:
         )
     if makeCommitsInDifferentRepo not in [0, 1]:
         raise ValueError('makeCommitsInDifferentRepo must in range [0, 1].')
-    if makeCommitsInDifferentRepo == 1 and pathToDifferentRepo == '':
+    if makeCommitsInDifferentRepo == 1 and nameOfDifferentRepo == '':
         raise ValueError(
-            'pathToDifferentRepo must be set if makeCommitsInDifferentRepo is set to 1.'
+            'nameOfDifferentRepo must be set if makeCommitsInDifferentRepo is set to 1.'
         )
+    if ignoreExistingGitRepo not in [0, 1]:
+        raise ValueError('ignoreExistingGitRepo must in range [0, 1].')
 
     string: str = ''
     spacesBetweenChars: list[int] = []
@@ -205,7 +214,8 @@ def validate_args(parser_args: argparse.Namespace) -> None:
         'minNumberOfCommitsAtOneDay': minNumberOfCommitsAtOneDay,
         'maxNumberOfCommitsAtOneDay': maxNumberOfCommitsAtOneDay,
         'makeCommitsInDifferentRepo': makeCommitsInDifferentRepo,
-        'pathToDifferentRepo': pathToDifferentRepo,
+        'nameOfDifferentRepo': nameOfDifferentRepo,
+        'ignoreExistingGitRepo': ignoreExistingGitRepo
     }
 
 
@@ -348,12 +358,20 @@ if __name__ == '__main__':
         help='Make commits in different repo (def.: 1).',
     )
 
-    parser.add_argument(  # --pathToDifferentRepo
-        '-pDR',
-        '--pathToDifferentRepo',
+    parser.add_argument(  # --nameOfDifferentRepo
+        '-nDR',
+        '--nameOfDifferentRepo',
         type=str,
         default='myTextOnGitHub',
-        help='Path to different repo (def.: myTextOnGitHub).',
+        help='Name of different repo (def.: myTextOnGitHub).',
+    )
+
+    parser.add_argument(  # --ignoreExistingGitRepo
+        '-iER',
+        '--ignoreExistingGitRepo',
+        type=int,
+        default=0,
+        help='Ignore existing git repo (def.: 0).',
     )
 
     main(parser_args=parser.parse_args())

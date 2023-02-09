@@ -23,7 +23,8 @@ bool cleanAfterExecution = true;
 int minNumberOfCommitsAtOneDay = 1;
 int maxNumberOfCommitsAtOneDay = 5;
 int makeCommitsInDifferentRepo = 1;
-std::string pathToDifferentRepo;
+std::string nameOfDifferentRepo;
+int ignoreExistingGitRepo = 0;
 
 // general
 std::vector<DayInformation> allDaysInYear;

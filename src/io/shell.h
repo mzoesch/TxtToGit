@@ -19,7 +19,7 @@ static std::string exec(const char *cmd) {
         throw std::runtime_error("Fatal error:\npopen() failed!");
     
     while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr) {
-        output +=buffer.data();
+        output += buffer.data();
 
         continue;
     }

@@ -22,7 +22,8 @@ public:
         , int minCommits
         , int maxCommits
         , int makeCommitsInDifferentRepo
-        , std::string pathToDifferentRepo
+        , std::string nameOfDifferentRepo
+        , int ignoreExistingGitRepo
     )
     ;
     ~AllDays();
@@ -37,6 +38,14 @@ private:
     const static int MONOSPACE_SIZE = 35;
     const static int DAYS_IN_WEEK = 7;
 
+    const std::string PWD = "pwd";
+    const std::string mkdir = "mkdir";
+    const std::string initGit = "git init";
+    const std::string andGate = "&&";
+    const std::string createChangeFile = "touch";
+    const std::string extForChangeFile = ".txt";
+    std::string changeFile;
+
     int year;
     int firstDayOfWeek;
     int _blockedDays;
@@ -47,8 +56,9 @@ private:
     int minCommits;
     int maxCommits;
     int makeCommitsInDifferentRepo;
-    std::string pathToDifferentRepo;
-    std::vector<DayInformation> _allDaysInYear;  
+    std::string nameOfDifferentRepo;
+    std::vector<DayInformation> _allDaysInYear;
+    int ignoreExistingGitRepo;
 
 private:
 
@@ -63,6 +73,8 @@ private:
     bool workableBoundsInYear(int x);
     void rotateRight(int weeks);
     void rotateLeft(int weeks);
+    void prepareGitRepo();
+    void deleteOldRepo();
     
 public:
 

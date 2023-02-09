@@ -40,7 +40,8 @@ void readFlags(
     , int *minNumberOfCommitsAtOneDay
     , int *maxNumberOfCommitsAtOneDay
     , int *makeCommitsInDifferentRepo
-    , std::string *pathToDifferentRepo
+    , std::string *nameOfDifferentRepo
+    , int *ignoreExistingGitRepo
     ) {
 
     std::ifstream file("./.flags");
@@ -101,8 +102,12 @@ void readFlags(
             *makeCommitsInDifferentRepo = std::stoi(value);
             continue;
         }
-        if (strcmp(key.c_str(), "pathToDifferentRepo") == 0) {
-            *pathToDifferentRepo = value;
+        if (strcmp(key.c_str(), "nameOfDifferentRepo") == 0) {
+            *nameOfDifferentRepo = value;
+            continue;
+        }
+        if (strcmp(key.c_str(), "ignoreExistingGitRepo") == 0) {
+            *ignoreExistingGitRepo = std::stoi(value);
             continue;
         }
         

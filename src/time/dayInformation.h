@@ -4,8 +4,14 @@
 #include "tDateHolder.h"
 #include "../io/shell.h"
 
+#include <filesystem>
 #include <ctime>
 #include <string>
+#include <dirent.h>
+#include <fstream>
+#include <errno.h>
+#include <sstream>
+#include <iomanip>
 
 const int timeStandard [] = {
     0       // second
@@ -37,9 +43,22 @@ private:
     bool commit;
     int _dayOfWeek;
 
+    const std::string andGate = "&&";
+    const std::string space = " ";
+    const std::string gitAdd = "git add";
+    const std::string gitC = "git commit";
+    const std::string gitCommitFalgMsg = "-m";
+    const std::string gitCommitFlagDate = "--date";
+    const std::string qMarks = "\"";
+    const std::string minus = "-";
+    const std::string col = ":";
+    const std::string goToHome = "cd ~";
+    const std::string goTo = "cd";
+
 private:
 
     int calculateDayOfWeek();
+    std::string getISO8601(int s); // s into the day
 
 public:
 
@@ -52,7 +71,13 @@ public:
     }
     tDateHolder getDate();
     void gitCommit(int min, int max);
-    void gitCommit(int min, int max, std::string pathToDifferentRepo);
+    void gitCommit(
+    int min
+    , int max
+    , std::string pathToDifferentRepo
+    , std::string changeFile
+    )
+    ;
     
 }
 ;
