@@ -1,10 +1,12 @@
 #ifndef TIME_STUFF_H
 #define TIME_STUFF_H
 
+
 #include "dayInformation.h"
 #include "../ex/exs.h"
 
 #include <vector>
+
 
 const std::vector<int> daysInMonth = {
     31
@@ -47,6 +49,5 @@ std::vector<DayInformation> getAllDaysInYear(
     int year
     )
     ;
-
 
 #endif

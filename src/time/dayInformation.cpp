@@ -1,5 +1,5 @@
 #include "dayInformation.h"
-#include <iostream>
+
 
 DayInformation::DayInformation(
     int year
@@ -16,7 +16,7 @@ DayInformation::DayInformation(
 
     return;
 }
-;
+
 
 int DayInformation::calculateDayOfWeek() {
 
@@ -43,10 +43,10 @@ bool DayInformation::isCommitable() {
     return this->commit;
 }
 
+
 void DayInformation::setCommitable(bool commit) {
     this->commit = commit;
 }
-;
 
 
 DayInformation::~DayInformation() {
@@ -54,7 +54,6 @@ DayInformation::~DayInformation() {
 
     return;
 }
-;
 
 
 tDateHolder DayInformation::getDate() {
@@ -70,17 +69,24 @@ tDateHolder DayInformation::getDate() {
 ;
 
 
-void DayInformation::gitCommit(int min, int max) {
-    std::cout << "Commits in same repo" << std::endl;
+void DayInformation::gitCommit(
+    int min
+    , int max
+    , std::string changeFile
+    ) {
+    
+    std::string s = exec(this->pwd.c_str());
 
-    std::cout << exec("pwd") << std::endl;
-
-    // int numCommits = min + (rand() % (max - min + 1));
-    // std::cout << "numCommits: " << numCommits << std::endl;
+    gitCommit(
+        min
+        , max
+        , s
+        , changeFile
+    )
+    ;
 
     return;
 }
-;
 
 
 void DayInformation::gitCommit(
@@ -219,4 +225,3 @@ std::string DayInformation::getISO8601(
 
     return ISO;
 }
-;

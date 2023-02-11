@@ -11,7 +11,8 @@
 #include <fstream>
 #include <errno.h>
 #include <sstream>
-#include <iomanip>
+#include <iostream>
+
 
 const int timeStandard [] = {
     0       // second
@@ -22,6 +23,7 @@ const int timeStandard [] = {
     , -1900 // year (since 1900)
 }
 ;
+
 
 class DayInformation {
 
@@ -54,6 +56,7 @@ private:
     const std::string col = ":";
     const std::string goToHome = "cd ~";
     const std::string goTo = "cd";
+    const std::string pwd = "pwd";
 
 private:
 
@@ -70,7 +73,12 @@ public:
         return std::to_string(this->day) + " " + std::to_string(this->month) + " " + std::to_string(this->year);
     }
     tDateHolder getDate();
-    void gitCommit(int min, int max);
+    void gitCommit(
+        int min
+        , int max
+        , std::string changeFile
+        )
+        ;
     void gitCommit(
     int min
     , int max
@@ -81,9 +89,5 @@ public:
     
 }
 ;
-
-
-
-
 
 #endif

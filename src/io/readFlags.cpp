@@ -1,5 +1,6 @@
 #include "readFlags.h"
 
+
 std::vector<int> convertStringToVectorOfInts(
     std::string *values
     ) {
@@ -28,6 +29,7 @@ std::vector<int> convertStringToVectorOfInts(
 
     return spaceBetweenChars;
 }
+
 
 void readFlags(
     int *year

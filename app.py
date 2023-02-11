@@ -3,7 +3,6 @@
 import argparse
 import time
 import subprocess
-import sys
 
 
 class SubprocessFailed(Exception):

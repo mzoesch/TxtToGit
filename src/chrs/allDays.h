@@ -9,8 +9,10 @@
 #include <stdlib.h>
 #include <string>
 
+
 const int HEIGHT = 7;
 const int MONO_WIDTH = 5;
+
 
 class AllDays {
 
@@ -38,14 +40,23 @@ private:
     const static int MONOSPACE_SIZE = 35;
     const static int DAYS_IN_WEEK = 7;
 
-    const std::string PWD = "pwd";
+    const std::string pwd = "pwd";
+    const std::string space = " ";
+    const std::string goToHome = "cd ~";
     const std::string mkdir = "mkdir";
     const std::string initGit = "git init";
+    const std::string addGit = "git add";
     const std::string andGate = "&&";
     const std::string createChangeFile = "touch";
     const std::string extForChangeFile = ".txt";
+    const std::string goTo = "cd";
     std::string changeFile;
+    const std::string touch = "touch";
+    const std::string README = "README.md";
+    const std::string gitHubLink = "https://www.github.com/mzoesch/TxtToGit";
+    const std::string author = "https://www.github.com/mzoesch";
 
+    
     int year;
     int firstDayOfWeek;
     int _blockedDays;
@@ -75,6 +86,10 @@ private:
     void rotateLeft(int weeks);
     void prepareGitRepo();
     void deleteOldRepo();
+    void createREADME(
+        std::__fs::filesystem::path pathToREADME
+    )
+    ;
     
 public:
 

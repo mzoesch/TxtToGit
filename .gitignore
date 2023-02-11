@@ -135,6 +135,9 @@ dmypy.json
 # Mac OS X
 .DS_Store
 
+# VSCode
+.VSCodeCounter/
+
 # App
 log.txt
 .flags

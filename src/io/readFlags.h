@@ -3,15 +3,17 @@
 
 #include <vector>
 #include <fstream>
-#include <iostream>
 #include <string>
 
+
 const double OUT_OF_BOUNDS = std::string::npos; // 18446744073709551615
+
 
 std::vector<int> convertStringToVectorOfInts(
     std::string *value
     )
     ;
+
 
 void readFlags(
     int *year
