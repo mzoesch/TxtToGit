@@ -298,7 +298,7 @@ if __name__ == '__main__':
         '--defaultSpace',
         type=int,
         default=1,
-        help='Default space int weeks (def.: 1).',
+        help='Default space in weeks (def.: 1).',
     )
 
     parser.add_argument(  # --align
