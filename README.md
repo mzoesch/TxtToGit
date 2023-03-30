@@ -18,7 +18,7 @@ app.py<br />
 -y YEAR, --year YEAR Year to gen for (def.: current year). <br />
 --firstDayOfWeek FIRSTDAYOFWEEK First day of week (So.: 0, Mo.: 1, ...) (def.: 0). <br />
 -m USEMONOSPACE, --useMonospace USEMONOSPACE Use monospace (def.: 1). <br />
--s DEFAULTSPACE, --defaultSpace DEFAULTSPACE Default space int weeks (def.: 1). <br />
+-s DEFAULTSPACE, --defaultSpace DEFAULTSPACE Default space in weeks (def.: 1). <br />
 -a ALIGN, --align ALIGN Align text (0: left, 1: center, 2: right) (def.: 0). <br />
 -msg MESSAGE, --message MESSAGE Message in commits (e.g. "Char SpaceInWeeks, A2, b1, ...") (def.: empty). <br />
 -msgStr MESSAGESTRING, --messageString MESSAGESTRING Message in commits; uses default Space for all characters (e.g. "ab") (def.: empty). <br />
